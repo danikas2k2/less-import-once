@@ -1,0 +1,36 @@
+{
+    "extends": "@tsconfig/node18",
+    "include": [
+        "src/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "src/*.test.ts"
+    ],
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outFile": "index.d.ts",
+        "declaration": true,
+        "lib": [
+            "es2021"
+        ],
+        "allowSyntheticDefaultImports": true,
+        "noFallthroughCasesInSwitch": true,
+        "isolatedModules": true,
+        "downlevelIteration": true,
+        "importsNotUsedAsValues": "error",
+        "types": [
+            "node",
+            "jest"
+        ],
+        "preserveSymlinks": true
+    },
+    "--ts-node": {
+        "esm": true,
+        "compilerOptions": {
+            "target": "es5",
+            "module": "commonjs",
+            "moduleResolution": "nodeNext"
+        }
+    }
+}

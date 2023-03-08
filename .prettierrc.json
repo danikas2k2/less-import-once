@@ -1,0 +1,26 @@
+{
+    "singleQuote": true,
+    "tabWidth": 4,
+    "printWidth": 120,
+    "trailingComma": "es5",
+    "overrides": [
+        {
+            "files": ["*.html", "*.pcss"],
+            "options": {
+                "singleQuote": false
+            }
+        },
+        {
+            "files": ["*.config.js"],
+            "options": {
+                "printWidth": 80
+            }
+        },
+        {
+            "files": ["webpack.config.js"],
+            "options": {
+                "printWidth": 120
+            }
+        }
+    ]
+}
