@@ -14,9 +14,10 @@
         "build": "pnpm run build:dt && pnpm run build:js",
         "build:dt": "tsc src/loader.ts --declaration true --emitDeclarationOnly true --outFile ./index.d.ts",
         "build:js": "esbuild src/loader.ts --bundle --minify --platform=node --external:./node_modules/\\* --outfile=./index.js",
-        "preversion": "pnpm test",
-        "version": "pnpm build && git add --all",
+        "preversion": "pnpm test && pnpm build",
+        "version": "git add --all",
         "postversion": "git push && git push --tags",
+        "prepublish": "pnpm test && pnpm build",
         "test": "jest"
     },
     "devDependencies": {
