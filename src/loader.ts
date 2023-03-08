@@ -1,17 +1,22 @@
 import type { RawLoaderDefinitionFunction } from 'webpack';
 
 interface LoaderContext {
-    sharedImports?: Map<string, string>;
+    data: {
+        sharedImports?: Map<string, string>;
+    };
 }
 
 const WebpackLessImportOnce: RawLoaderDefinitionFunction<{}, LoaderContext> = function (
     content: string | Buffer
 ): Buffer {
-    if (!this.sharedImports) {
-        this.sharedImports = new Map<string, string>();
+    if (!this.data.sharedImports) {
+        this.data.sharedImports = new Map<string, string>();
     }
 
-    const { resourcePath, sharedImports } = this;
+    const {
+        resourcePath,
+        data: { sharedImports },
+    } = this;
     const localImports = new Set<string>();
 
     return Buffer.from(

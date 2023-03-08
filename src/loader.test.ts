@@ -3,6 +3,7 @@ import lessImportOnce from './loader';
 
 describe('webpack.lessImportOnce', () => {
     const context = {
+        data: {},
         resourcePath: 'test.less',
     } as LoaderContext<object>;
 
