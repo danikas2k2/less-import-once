@@ -1,6 +1,6 @@
 {
     "name": "less-import-once",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Webpack loader to removes duplicated LESS imports marked as (once)",
     "main": "index.js",
     "keywords": [],
