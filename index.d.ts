@@ -1,10 +1,5 @@
 declare module "loader" {
     import type { RawLoaderDefinitionFunction } from 'webpack';
-    interface LoaderContext {
-        data: {
-            sharedImports?: Map<string, string>;
-        };
-    }
-    const WebpackLessImportOnce: RawLoaderDefinitionFunction<{}, LoaderContext>;
+    const WebpackLessImportOnce: RawLoaderDefinitionFunction;
     export default WebpackLessImportOnce;
 }

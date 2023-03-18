@@ -24,13 +24,5 @@
             "jest"
         ],
         "preserveSymlinks": true
-    },
-    "--ts-node": {
-        "esm": true,
-        "compilerOptions": {
-            "target": "es5",
-            "module": "commonjs",
-            "moduleResolution": "nodeNext"
-        }
     }
 }
