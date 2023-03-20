@@ -21,7 +21,7 @@
         "test": "jest"
     },
     "devDependencies": {
-        "@tsconfig/node18": "^1.0.1",
+        "@tsconfig/node16": "^1.0.3",
         "@types/jest": "^29.5.0",
         "@types/lodash": "^4.14.191",
         "@types/node": "^18.15.3",
@@ -32,7 +32,7 @@
         "less-loader": "^11.1.0",
         "lodash": "^4.17.21",
         "memfs": "^3.4.13",
-        "prettier": "^2.8.4",
+        "prettier": "^2.8.5",
         "ts-jest": "^29.0.5",
         "typescript": "^5.0.2",
         "unionfs": "^4.4.0",

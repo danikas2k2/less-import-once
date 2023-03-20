@@ -31,7 +31,7 @@ export default async (
                                     'css-loader',
                                     'less-loader',
                                     {
-                                        loader: path.resolve(__dirname, '../src/loader.ts'),
+                                        loader: path.resolve(__dirname, '../../src/loader.ts'),
                                         options: loaderOptions,
                                     },
                                 ],

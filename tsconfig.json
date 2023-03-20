@@ -1,28 +1,22 @@
 {
-    "extends": "@tsconfig/node18",
+    "extends": "@tsconfig/node16",
     "include": [
-        "src/*"
+        "src/*",
+        "test/*"
     ],
     "exclude": [
-        "node_modules",
-        "src/*.test.ts"
+        "node_modules"
     ],
     "compilerOptions": {
         "baseUrl": ".",
-        "outFile": "index.d.ts",
-        "declaration": true,
-        "lib": [
-            "es2021"
-        ],
-        "allowSyntheticDefaultImports": true,
-        "noFallthroughCasesInSwitch": true,
-        "isolatedModules": true,
-        "downlevelIteration": true,
-        "importsNotUsedAsValues": "error",
         "types": [
             "node",
             "jest"
         ],
+        "allowSyntheticDefaultImports": true,
+        "downlevelIteration": true,
+        "isolatedModules": true,
+        "noFallthroughCasesInSwitch": true,
         "preserveSymlinks": true
     }
 }
