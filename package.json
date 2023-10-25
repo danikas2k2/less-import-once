@@ -11,9 +11,9 @@
         "url": "https://github.com/danikas2k2/less-import-once.git"
     },
     "scripts": {
-        "build": "pnpm build:dt && pnpm build:js",
-        "build:dt": "tsc src/loader.ts --declaration true --emitDeclarationOnly true --outFile ./index.d.ts",
-        "build:js": "esbuild src/loader.ts --bundle --minify --platform=node --packages=external --outfile=./index.js",
+        "build": "pnpm build:types && pnpm build:script",
+        "build:types": "tsc src/loader.ts --declaration true --emitDeclarationOnly true --outFile ./index.d.ts",
+        "build:script": "esbuild src/loader.ts --bundle --minify --platform=node --packages=external --outfile=./index.js",
         "preversion": "git pull && pnpm test",
         "version": "pnpm build && git add --all && git commit -m \"$npm_package_version\"",
         "postversion": "git push && git push --tags",
