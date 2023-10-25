@@ -3,37 +3,39 @@ import { compile } from './utils/compile';
 import { DIR, ufs } from './utils/ufs';
 
 describe('single entry', () => {
-    const entry = path.resolve(DIR, 'test.less');
+    const first = path.resolve(DIR, 'test.less');
+    const second = path.resolve(DIR, 'test2.less');
+    const entries = [first, second];
 
     it('no imports', async () => {
         ufs.writeFileSync(
-            entry,
+            first,
             `
             .test { color: red; }
             `
         );
 
-        const [output] = await compile({ entry });
+        const [output] = await compile({ entry: first });
         expect(output).toMatch(/\.test\s+\{/);
     });
 
     it('simple import', async () => {
         ufs.writeFileSync(
-            entry,
+            first,
             `
             @import 'button.less';
             .test { color: red; }
             `
         );
 
-        const [output] = await compile({ entry });
+        const [output] = await compile({ entry: first });
         expect(output).toMatch(/\.button\s+\{/);
         expect(output).toMatch(/\.test\s+\{/);
     });
 
     it('duplicate imports', async () => {
         ufs.writeFileSync(
-            entry,
+            first,
             `
             @import 'button.less';
             @import 'button.less';
@@ -41,15 +43,13 @@ describe('single entry', () => {
             `
         );
 
-        const [output] = await compile({ entry });
+        const [output] = await compile({ entry: first });
         expect([...output.matchAll(/\.button\s+\{/g)]).toHaveLength(1);
     });
 
-    const entries = [entry, path.resolve(DIR, 'test2.less')];
-
     it('simple imports in separate files', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import 'input.less';
             @import 'button.less';
@@ -58,7 +58,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import 'input.less';
             @import 'checkbox.less';
@@ -80,20 +80,20 @@ describe('single entry', () => {
 
     it('import once', async () => {
         ufs.writeFileSync(
-            entry,
+            first,
             `
                 @import (once) 'button.less';
                 .test { color: red; }
                 `
         );
 
-        const [output] = await compile({ entry });
+        const [output] = await compile({ entry: first });
         expect(output).toMatch(/\.button\s+\{/);
     });
 
     it('import once in separate files', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import (once) 'input.less';
             @import (once) 'button.less';
@@ -102,7 +102,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import (once) 'input.less';
             @import (once) 'checkbox.less';
@@ -128,7 +128,7 @@ describe('single entry', () => {
 
     it('import once, incremental build', async () => {
         ufs.writeFileSync(
-            entry,
+            first,
             `
             @import (once) 'input.less';
             @import (once) 'button.less';
@@ -136,8 +136,8 @@ describe('single entry', () => {
             `
         );
 
-        await compile({ entry });
-        const output = await compile({ entry }, {}, {}, true);
+        await compile({ entry: first });
+        const output = await compile({ entry: first }, {}, {}, true);
         expect(output).toHaveLength(1);
 
         expect(output[0]).toMatch(/\.input\s+\{/);
@@ -145,13 +145,13 @@ describe('single entry', () => {
         expect(output[0]).toMatch(/\.test\s+\{/);
     });
 
-    const rxInputImport = /import ___CSS_LOADER_AT_RULE_IMPORT_0___ from "[^"]+\.\/input\.less";/;
-    const rxButtonImport = /import ___CSS_LOADER_AT_RULE_IMPORT_[01]___ from "[^"]+\.\/button\.less";/;
-    const rxCheckboxImport = /import ___CSS_LOADER_AT_RULE_IMPORT_[01]___ from "[^"]+\.\/checkbox\.less";/;
+    const rxInputImport = /import \w+ from "[^"]+\.\/input\.less";/;
+    const rxButtonImport = /import \w+ from "[^"]+\.\/button\.less";/;
+    const rxCheckboxImport = /import \w+ from "[^"]+\.\/checkbox\.less";/;
 
     it('css imports in separate files', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import (css) 'input.less';
             @import (css) 'button.less';
@@ -160,7 +160,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import (css) 'input.less';
             @import (css) 'checkbox.less';
@@ -190,7 +190,7 @@ describe('single entry', () => {
 
     it('css+once imports in separate files', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import (css,once) 'input.less';
             @import (css,once) 'button.less';
@@ -199,7 +199,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import (once,css) 'input.less';
             @import (once,css) 'checkbox.less';
@@ -230,7 +230,7 @@ describe('single entry', () => {
 
     it('css+reference imports in separate files', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import (css,reference) 'input.less';
             @import (reference,css) 'button.less';
@@ -239,7 +239,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import (reference,css) 'input.less';
             @import (css,reference) 'checkbox.less';
@@ -265,7 +265,7 @@ describe('single entry', () => {
 
     it('css+once+reference imports in separate files', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import (css,once,reference) 'input.less';
             @import (css,reference,once) 'button.less';
@@ -274,7 +274,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import (once,reference,css) 'input.less';
             @import (once,css,reference) 'checkbox.less';
@@ -300,7 +300,7 @@ describe('single entry', () => {
 
     it('once imports with double quotes', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import (css,once) "input.less";
             @import (css,once) "button.less";
@@ -309,7 +309,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import (once,css) "input.less";
             @import (once,css) "checkbox.less";
@@ -340,7 +340,7 @@ describe('single entry', () => {
 
     it('once imports with url', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import (css,once) url(input.less);
             @import (css,once) url(button.less);
@@ -349,7 +349,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import (once,css) url(input.less);
             @import (once,css) url(checkbox.less);
@@ -380,7 +380,7 @@ describe('single entry', () => {
 
     it('once imports with url and quotes', async () => {
         ufs.writeFileSync(
-            entries[0],
+            first,
             `
             @import (css,once) url('input.less');
             @import (css,once) url("button.less");
@@ -389,7 +389,7 @@ describe('single entry', () => {
         );
 
         ufs.writeFileSync(
-            entries[1],
+            second,
             `
             @import (once,css) url("input.less");
             @import (once,css) url('checkbox.less');

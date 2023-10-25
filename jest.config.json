@@ -5,9 +5,8 @@
         "ts"
     ],
     "testEnvironment": "node",
-    "preset": "ts-jest",
     "transform": {
-        "\\.[jt]s$": "ts-jest"
+        "\\.[jt]s$": "esbuild-jest"
     },
     "collectCoverage": false,
     "collectCoverageFrom": [

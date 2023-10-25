@@ -3,32 +3,18 @@ import { compile } from './utils/compile';
 import { DIR, ufs } from './utils/ufs';
 
 describe('multiple entries', () => {
+    const first = path.resolve(DIR, 'test.less');
+    const second = path.resolve(DIR, 'test2.less');
+    const third = path.resolve(DIR, 'test3.less');
     const entry = {
-        first: path.resolve(DIR, 'test.less'),
-        second: [path.resolve(DIR, 'test2.less'), path.resolve(DIR, 'test3.less')],
+        first,
+        second: [second, third],
     };
 
     it('no imports', async () => {
-        ufs.writeFileSync(
-            entry.first,
-            `
-            .test { color: red; }
-            `
-        );
-
-        ufs.writeFileSync(
-            entry.second[0],
-            `
-            .test2 { color: blue; }
-            `
-        );
-
-        ufs.writeFileSync(
-            entry.second[1],
-            `
-            .test3 { color: green; }
-            `
-        );
+        ufs.writeFileSync(first, `.test { color: red; }`);
+        ufs.writeFileSync(second, `.test2 { color: blue; }`);
+        ufs.writeFileSync(third, `.test3 { color: green; }`);
 
         const output = await compile({ entry });
         expect(output).toHaveLength(3);
@@ -39,7 +25,7 @@ describe('multiple entries', () => {
 
     it('simple imports', async () => {
         ufs.writeFileSync(
-            entry.first,
+            first,
             `
             @import 'button.less';
             .test { color: red; }
@@ -47,7 +33,7 @@ describe('multiple entries', () => {
         );
 
         ufs.writeFileSync(
-            entry.second[0],
+            second,
             `
             @import 'checkbox.less';
             .test2 { color: blue; }
@@ -55,7 +41,7 @@ describe('multiple entries', () => {
         );
 
         ufs.writeFileSync(
-            entry.second[1],
+            third,
             `
             @import 'button.less';
             .test3 { color: green; }
@@ -77,7 +63,7 @@ describe('multiple entries', () => {
 
     it('simple imports in separate files', async () => {
         ufs.writeFileSync(
-            entry.first,
+            first,
             `
             @import 'input.less';
             @import 'button.less';
@@ -86,7 +72,7 @@ describe('multiple entries', () => {
         );
 
         ufs.writeFileSync(
-            entry.second[0],
+            second,
             `
             @import 'input.less';
             @import 'checkbox.less';
@@ -95,7 +81,7 @@ describe('multiple entries', () => {
         );
 
         ufs.writeFileSync(
-            entry.second[1],
+            third,
             `
             @import 'input.less';
             @import 'button.less';
@@ -121,7 +107,7 @@ describe('multiple entries', () => {
 
     it('import once in separate files', async () => {
         ufs.writeFileSync(
-            entry.first,
+            first,
             `
             @import (once) 'button.less';
             .test { color: red; }
@@ -129,7 +115,7 @@ describe('multiple entries', () => {
         );
 
         ufs.writeFileSync(
-            entry.second[0],
+            second,
             `
             @import (once) 'checkbox.less';
             .test2 { color: blue; }
@@ -137,7 +123,7 @@ describe('multiple entries', () => {
         );
 
         ufs.writeFileSync(
-            entry.second[1],
+            third,
             `
             @import (once) 'button.less';
              .test3 { color: green; }
